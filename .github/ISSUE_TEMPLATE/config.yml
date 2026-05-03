@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: SchoolSoft+ main app
+    url: https://github.com/elias4044/schoolsoftplus
+    about: Issues with SchoolSoft+ itself (not the docs site) go here.

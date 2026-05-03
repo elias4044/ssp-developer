@@ -1,36 +1,139 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<div align="center">
 
-## Getting Started
+ <img src="public/logo.png" alt="SchoolSoft+ Logo" width="72" height="72" />
 
-First, run the development server:
+  <h1>SchoolSoft+ Developer</h1>
+
+  <p>
+    The official documentation site for SchoolSoft+ — covering the unofficial SchoolSoft API
+    (reverse-engineered) and every route exposed by the SchoolSoft+ platform itself.
+  </p>
+
+  <p>
+    <a href="https://developer.ssp.elias4044.com"><img src="https://img.shields.io/badge/live-developer.ssp.elias4044.com-7ca5d0?style=flat-square" alt="Live site" /></a>
+    <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-3fb950?style=flat-square" alt="MIT License" /></a>
+    <img src="https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js" alt="Next.js 16" />
+    <img src="https://img.shields.io/badge/TypeScript-5-3178c6?style=flat-square&logo=typescript" alt="TypeScript 5" />
+    <img src="https://img.shields.io/badge/Tailwind_CSS-v4-0ea5e9?style=flat-square&logo=tailwindcss" alt="Tailwind CSS v4" />
+  </p>
+
+  <br/>
+
+</div>
+
+---
+
+## What's in here
+
+| Section | Description |
+|---|---|
+| [SchoolSoft API Reference](https://developer.ssp.elias4044.com/docs/schoolsoft-api) | Unofficial, reverse-engineered docs for SchoolSoft's internal REST & JSP endpoints — auth flow, schedule, lunch, news, subjects, assignments |
+| [SchoolSoft+ Routes](https://developer.ssp.elias4044.com/docs/ssp-routes) | Full reference for every API route in SchoolSoft+ — auth, academic data, social, notes, countdowns, presence, and more |
+
+---
+
+## Stack
+
+- **[Next.js 16](https://nextjs.org/)** — App Router, React 19, Server Components
+- **[TypeScript 5](https://www.typescriptlang.org/)** — strict mode throughout
+- **[Tailwind CSS v4](https://tailwindcss.com/)** — utility classes + CSS custom properties for the design system
+- **[Lucide React](https://lucide.dev/)** — SVG icon library
+- **[Geist](https://vercel.com/font)** — Vercel's Geist Sans & Geist Mono typefaces
+
+No external UI component library — all doc primitives (`CodeBlock`, `EndpointCard`, `ParamTable`, `Callout`, etc.) are hand-rolled in `components/DocComponents.tsx`.
+
+---
+
+## Getting started
+
+**Prerequisites:** Node.js 18+ and npm.
 
 ```bash
+# 1. Clone the repo
+git clone https://github.com/elias4044/ssp-developer.git
+cd ssp-developer
+
+# 2. Install dependencies
+npm install
+
+# 3. Start the dev server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Other commands
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build   # production build
+npm run start   # start production server
+npm run lint    # run ESLint
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Project structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+app/
+├── page.tsx                      # Home / landing page
+├── layout.tsx                    # Root layout (NavBar + Footer)
+├── globals.css                   # Design tokens (CSS custom properties)
+└── docs/
+    ├── schoolsoft-api/page.tsx   # Unofficial SchoolSoft API reference
+    └── ssp-routes/page.tsx       # SchoolSoft+ routes reference
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+components/
+├── NavBar.tsx                    # Sticky top nav + mobile drawer
+├── Footer.tsx                    # Site footer
+├── DocLayout.tsx                 # Two-column doc layout (sticky sidebar + main)
+├── DocComponents.tsx             # Reusable doc primitives
+│   ├── MethodBadge               # GET / POST / PUT / PATCH / DELETE pill
+│   ├── CodeBlock                 # Syntax-highlighted code block with copy
+│   ├── EndpointCard              # Collapsible endpoint card with copy-path
+│   ├── ParamTable                # Request/response parameter table
+│   ├── SectionHeading            # h2 with anchor-copy button
+│   ├── SubHeading                # h3 with # prefix
+│   └── Callout                   # info / warning / danger callout
+└── HomeFeatureCards.tsx          # Interactive feature cards (Client Component)
+```
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Design system
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+All colors are defined as CSS custom properties in `app/globals.css` and referenced throughout via `var(--*)`. There are no hardcoded color values in component files.
+
+| Token | Value | Usage |
+|---|---|---|
+| `--background` | `#0d1117` | Page background |
+| `--surface` | `#161b22` | Cards, sidebar, navbar |
+| `--surface-raised` | `#1c2128` | Elevated surfaces |
+| `--border` | `#30363d` | All borders |
+| `--foreground` | `#cdd9e5` | Primary text |
+| `--muted` | `#768390` | Secondary text |
+| `--accent` | `#7ca5d0` | Links, active states, icons |
+
+---
+
+## Contributing
+
+Contributions, corrections, and additions are welcome — especially to the API docs, which are reverse-engineered and may be incomplete or out of date.
+
+1. Fork the repo and create a branch: `git checkout -b fix/my-change`
+2. Make your changes
+3. Open a pull request — fill in the PR template
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) before submitting.
+
+---
+
+## Related
+
+- **[SchoolSoft+](https://github.com/elias4044/schoolsoftplus)** — the main app this documents
+---
+
+## License
+
+[MIT](LICENSE) © Elias Gulam
+
