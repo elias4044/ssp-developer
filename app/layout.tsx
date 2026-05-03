@@ -22,9 +22,6 @@ export const metadata: Metadata = {
   description:
     "Official developer documentation for SchoolSoft+ — including an unofficial SchoolSoft API reference and full SchoolSoft+ route documentation.",
   keywords: ["SchoolSoft", "API", "documentation", "SchoolSoft+", "developer"],
-  icons: {
-    icon: "/favicon.ico",
-  }
 };
 
 export default function RootLayout({
