@@ -7,6 +7,7 @@ import { Sparkles } from "lucide-react";
 
 const navLinks = [
   { href: "/", label: "Home" },
+  { href: "/docs/ssp-node", label: "SSP Node" },
   { href: "/docs/schoolsoft-api", label: "SchoolSoft API" },
   { href: "/docs/ssp-routes", label: "SSP+ Routes" },
 ];
