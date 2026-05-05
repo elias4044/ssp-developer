@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Sparkles } from "lucide-react";
+import Image from "next/image";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -61,7 +62,7 @@ export default function NavBar() {
               flexShrink: 0,
             }}
           >
-            <Sparkles className="w-4 h-4 text-primary" />
+            <Image src="/logo.png" alt="SchoolSoft+ Logo" width={32} height={32} className="w-5 h-5 text-primary" />
             <span style={{ fontWeight: 600, fontSize: "0.9rem", letterSpacing: "-0.01em" }}>
               SchoolSoft+
             </span>

@@ -42,17 +42,44 @@ const sidebar: SidebarSection[] = [
             { id: "get-schedule", label: "getSchedule" },
             { id: "get-assignments-for-week", label: "getAssignmentsForWeek" },
             { id: "get-assignment", label: "getAssignment" },
+            { id: "get-calendar-events", label: "getCalendarEvents" },
             { id: "get-subjects", label: "getSubjects" },
             { id: "get-subject", label: "getSubject" },
             { id: "get-news", label: "getNews" },
+            { id: "get-news-detail", label: "getNewsDetail" },
             { id: "get-startpage", label: "getStartpage" },
             { id: "get-class-students", label: "getClassStudents" },
+        ],
+    },
+    {
+        title: "Messages",
+        items: [
+            { id: "get-inbox", label: "getInbox" },
+            { id: "get-outbox", label: "getOutbox" },
+            { id: "get-message", label: "getMessage" },
+            { id: "send-message", label: "sendMessage" },
+            { id: "mark-message-read", label: "markMessageRead" },
+        ],
+    },
+    {
+        title: "Attendance",
+        items: [
+            { id: "get-attendance", label: "getAttendance" },
+            { id: "get-absence-summary", label: "getAbsenceSummary" },
+        ],
+    },
+    {
+        title: "Grades",
+        items: [
+            { id: "get-grades", label: "getGrades" },
+            { id: "get-grade-overview", label: "getGradeOverview" },
         ],
     },
     {
         title: "Advanced",
         items: [
             { id: "functional-api", label: "Functional API" },
+            { id: "raw-method", label: "client.raw()" },
             { id: "raw-requests", label: "Raw requests" },
             { id: "pkce-utilities", label: "PKCE utilities" },
             { id: "token-storage", label: "Token storage" },
@@ -95,17 +122,50 @@ export default function SspNodePage() {
                 }}>
                     NPM LIBRARY
                 </div>
-                <h1 style={{
-                    fontSize: "clamp(1.75rem, 4vw, 2.25rem)", fontWeight: 800,
-                    letterSpacing: "-0.03em", color: "var(--foreground)", marginBottom: "0.75rem",
-                }}>
-                    SchoolSoft+ Node
-                </h1>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.75rem" }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                        src="https://github.com/elias4044/ssp-node/blob/main/public/logo.png?raw=true"
+                        alt="ssp-node logo"
+                        width={40}
+                        height={40}
+                        style={{ borderRadius: "8px", flexShrink: 0 }}
+                    />
+                    <h1 style={{
+                        fontSize: "clamp(1.75rem, 4vw, 2.25rem)", fontWeight: 800,
+                        letterSpacing: "-0.03em", color: "var(--foreground)", margin: 0,
+                    }}>
+                        SchoolSoft+ Node
+                    </h1>
+                    <a
+                        href="https://github.com/elias4044/ssp-node"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                            display: "inline-flex", alignItems: "center", gap: "0.35rem",
+                            padding: "0.25rem 0.65rem", borderRadius: "6px",
+                            border: "1px solid var(--border)", background: "var(--surface-raised)",
+                            color: "var(--muted)", fontSize: "0.75rem", fontWeight: 500,
+                            textDecoration: "none", whiteSpace: "nowrap",
+                        }}
+                    >
+                        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
+                             0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01
+                             1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95
+                             0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68
+                             0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15
+                             0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013
+                             8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+                        </svg>
+                        GitHub
+                    </a>
+                </div>
                 <p style={mutedLg}>
                     <code style={inlineCode}>@elias4044/ssp-node</code> is the official Node.js library for
                     the SchoolSoft+ platform. It wraps SchoolSoft&apos;s unofficial internal REST API and gives you
-                    a clean, typed interface to authenticate, fetch schedules, assignments, lunch menus, news, and more —
-                    all without any runtime dependencies beyond Node&apos;s built-in modules.
+                    a clean, typed interface to authenticate, fetch schedules, assignments, lunch menus, messages,
+                    grades, attendance, and more — all without any runtime dependencies beyond Node&apos;s built-in modules.
                 </p>
             </div>
 
@@ -332,9 +392,10 @@ const news = await client.getNews();`} />
 await client.mobileRefresh();
 
 // Check token state
-console.log(client.accessToken);         // current access token string or null
-console.log(client.refreshToken);        // current refresh token or null
-console.log(client.isAccessTokenExpired); // boolean`} />
+console.log(client.accessToken);          // current access token string or null
+console.log(client.refreshToken);         // current refresh token or null
+console.log(client.isAccessTokenExpired); // boolean
+console.log(client.hasMobileToken);       // true if an access token is present (any expiry)`} />
             <Callout type="info">
                 <code style={inlineCode}>mobileExchangeSession()</code> automatically calls
                 <code style={inlineCode}> mobileRefresh()</code> if <code style={inlineCode}>isAccessTokenExpired</code> is
@@ -516,14 +577,19 @@ for (const lesson of lessons) {
             </Callout>
 
             {/* ── getAssignmentsForWeek ── */}
-            <SectionHeading id="get-assignments-for-week">getAssignmentsForWeek(week, year)</SectionHeading>
+            <SectionHeading id="get-assignments-for-week">getAssignmentsForWeek(week?, year?)</SectionHeading>
             <p style={muted}>
-                Returns a flat list of all assignments due in a given week. Each object contains
+                Returns a flat list of all assignments due in a given week. Both parameters default
+                to the current ISO week and year if omitted. Each object contains
                 the assignment&apos;s <code style={inlineCode}>id</code> and <code style={inlineCode}>title</code>, plus any
                 additional fields SchoolSoft includes. Pass the ID to <code style={inlineCode}>getAssignment()</code> to
                 fetch full details.
             </p>
-            <CodeBlock language="typescript" code={`const assignments = await client.getAssignmentsForWeek(22, 2025);
+            <CodeBlock language="typescript" code={`// Current week (defaults)
+const assignments = await client.getAssignmentsForWeek();
+
+// Specific week and year
+const assignments = await client.getAssignmentsForWeek(22, 2025);
 // Returns: Assignment[]
 
 for (const a of assignments) {
@@ -534,8 +600,8 @@ for (const a of assignments) {
             <ParamTable
                 title="getAssignmentsForWeek() — parameters"
                 rows={[
-                    { name: "week", type: "number", required: true, description: "ISO week number." },
-                    { name: "year", type: "number", required: true, description: "Full four-digit year, e.g. 2025." },
+                    { name: "week", type: "number", required: false, description: "ISO week number. Defaults to current week." },
+                    { name: "year", type: "number", required: false, description: "Full four-digit year. Defaults to current year." },
                 ]}
             />
             <p style={muted}>Return type: <code style={inlineCode}>Assignment[]</code></p>
@@ -584,6 +650,44 @@ console.log(detail.grading);             // grading object or null`} />
     assessedCriteriaTabs: unknown[];
   } | null;
   grading: unknown | null;
+}`} />
+
+            {/* ── getCalendarEvents ── */}
+            <SectionHeading id="get-calendar-events">getCalendarEvents(week?)</SectionHeading>
+            <p style={muted}>
+                Returns non-lesson calendar events for the given week — such as school holidays,
+                custom reminders, and other entries that appear on the SchoolSoft calendar but are
+                not regular lessons. Defaults to the current ISO week.
+            </p>
+            <CodeBlock language="typescript" code={`// Current week
+const events = await client.getCalendarEvents();
+
+// Specific week
+const events = await client.getCalendarEvents(22);
+// Returns: CalendarEvent[]
+
+for (const ev of events) {
+  console.log(ev.title);     // event title
+  console.log(ev.startDate); // ISO 8601 string or undefined
+  console.log(ev.endDate);   // ISO 8601 string or undefined
+  console.log(ev.allDay);    // boolean — true for all-day entries
+  console.log(ev.type);      // event type string from SchoolSoft
+}`} />
+            <ParamTable
+                title="getCalendarEvents() — parameters"
+                rows={[
+                    { name: "week", type: "number", required: false, description: "ISO week number (1–53). Defaults to current week." },
+                ]}
+            />
+            <p style={muted}>Return type: <code style={inlineCode}>CalendarEvent[]</code></p>
+            <CodeBlock language="typescript" code={`interface CalendarEvent {
+  id?:        string | number;
+  title?:     string;
+  startDate?: string;   // ISO 8601
+  endDate?:   string;   // ISO 8601
+  allDay?:    boolean;
+  type?:      string;
+  [key: string]: unknown;
 }`} />
 
             {/* ── getSubjects ── */}
@@ -658,8 +762,38 @@ for (const item of news) {
   console.log(item.preview); // short preview text or null
 }`} />
             <p style={muted}>Return type: <code style={inlineCode}>NewsItem[]</code></p>
+
+            {/* ── getNewsDetail ── */}
+            <SectionHeading id="get-news-detail">getNewsDetail(id)</SectionHeading>
+            <p style={muted}>
+                Fetches the full content of a single news article by its ID. Returns <code style={inlineCode}>null</code> if
+                the article is not found.
+            </p>
+            <CodeBlock language="typescript" code={`const article = await client.getNewsDetail('42');
+if (article) {
+  console.log(article.id);           // '42'
+  console.log(article.title);        // article headline
+  console.log(article.body);         // raw HTML body of the article
+  console.log(article.date);         // date string or null
+  console.log(article.attachments);  // [{ name, url }, ...]
+}`} />
+            <ParamTable
+                title="getNewsDetail() — parameters"
+                rows={[
+                    { name: "id", type: "string | number", required: true, description: "News item ID (from getNews())." },
+                ]}
+            />
+            <p style={muted}>Return type: <code style={inlineCode}>NewsDetail | null</code></p>
+            <CodeBlock language="typescript" code={`interface NewsDetail {
+  id:          string;
+  title:       string;
+  body:        string;         // raw HTML
+  date:        string | null;
+  attachments: Array<{ name: string; url: string }>;
+}`} />
             <Callout type="warning">
-                <code style={inlineCode}>getNews()</code>, <code style={inlineCode}>getStartpage()</code>, and
+                <code style={inlineCode}>getNews()</code>, <code style={inlineCode}>getNewsDetail()</code>,{" "}
+                <code style={inlineCode}>getStartpage()</code>, and
                 <code style={inlineCode}> getClassStudents()</code> scrape HTML pages rather than calling
                 JSON endpoints. They depend on SchoolSoft&apos;s page structure and may break if SchoolSoft changes their HTML layout.
             </Callout>
@@ -724,6 +858,218 @@ for (const s of students) {
   address: string | null;
 }`} />
 
+            {/*  MESSAGES  */}
+            <SectionHeading id="get-inbox">getInbox()</SectionHeading>
+            <p style={muted}>
+                Returns the list of messages in the authenticated user&apos;s inbox.
+            </p>
+            <CodeBlock language="typescript" code={`const messages = await client.getInbox();
+// Returns: Message[]
+
+for (const msg of messages) {
+  console.log(msg.id);         // message ID
+  console.log(msg.subject);    // message subject line
+  console.log(msg.senderName); // display name of the sender
+  console.log(msg.date);       // date string from SchoolSoft
+  console.log(msg.read);       // boolean — whether the message has been read
+}`} />
+            <p style={muted}>Return type: <code style={inlineCode}>Message[]</code></p>
+
+            <SectionHeading id="get-outbox">getOutbox()</SectionHeading>
+            <p style={muted}>
+                Returns the list of messages the authenticated user has sent.
+            </p>
+            <CodeBlock language="typescript" code={`const sent = await client.getOutbox();
+// Returns: Message[]`} />
+            <p style={muted}>Return type: <code style={inlineCode}>Message[]</code></p>
+            <CodeBlock language="typescript" code={`interface Message {
+  id:          string | number;
+  subject:     string;
+  senderName?: string;
+  senderId?:   string | number;
+  date?:       string;
+  read?:       boolean;
+  [key: string]: unknown;
+}`} />
+
+            <SectionHeading id="get-message">getMessage(id)</SectionHeading>
+            <p style={muted}>
+                Fetches the full content of a single message, including its body, recipients,
+                and any attachments. Returns <code style={inlineCode}>null</code> if not found.
+            </p>
+            <CodeBlock language="typescript" code={`const detail = await client.getMessage(42);
+if (detail) {
+  console.log(detail.subject);       // subject line
+  console.log(detail.body);          // full message body text
+  console.log(detail.recipients);    // MessageRecipient[]
+  console.log(detail.attachments);   // MessageAttachment[]
+}`} />
+            <ParamTable
+                title="getMessage() — parameters"
+                rows={[
+                    { name: "id", type: "string | number", required: true, description: "Message ID (from getInbox() or getOutbox())." },
+                ]}
+            />
+            <p style={muted}>Return type: <code style={inlineCode}>MessageDetail | null</code></p>
+            <CodeBlock language="typescript" code={`interface MessageDetail extends Message {
+  body:          string;
+  recipients?:   MessageRecipient[];
+  attachments?:  MessageAttachment[];
+  [key: string]: unknown;
+}
+
+interface MessageRecipient {
+  id:    string | number;
+  name:  string;
+  type?: string;
+}
+
+interface MessageAttachment {
+  id:   string | number;
+  name: string;
+  url?: string;
+}`} />
+
+            <SectionHeading id="send-message">sendMessage(options)</SectionHeading>
+            <p style={muted}>
+                Sends a message to one or more recipients.
+            </p>
+            <CodeBlock language="typescript" code={`const result = await client.sendMessage({
+  subject:    'Hello from ssp-node',
+  body:       'This message was sent programmatically.',
+  recipients: [
+    { id: 12345, type: 'student' },
+    { id: 67890, type: 'staff'   },
+  ],
+});
+
+console.log(result.success); // true
+console.log(result.status);  // HTTP status code`} />
+            <ParamTable
+                title="sendMessage() — options"
+                rows={[
+                    { name: "subject",    type: "string",                                        required: true, description: "Message subject line." },
+                    { name: "body",       type: "string",                                        required: true, description: "Message body text." },
+                    { name: "recipients", type: "Array<{ id: string | number; type?: string }>", required: true, description: "List of recipient objects with numeric IDs." },
+                ]}
+            />
+            <p style={muted}>Return type: <code style={inlineCode}>{"{ success: boolean; status: number }"}</code></p>
+
+            <SectionHeading id="mark-message-read">markMessageRead(id)</SectionHeading>
+            <p style={muted}>
+                Marks a message as read. Returns <code style={inlineCode}>true</code> on success.
+            </p>
+            <CodeBlock language="typescript" code={`const ok = await client.markMessageRead(42);
+console.log(ok); // true`} />
+            <ParamTable
+                title="markMessageRead() — parameters"
+                rows={[
+                    { name: "id", type: "string | number", required: true, description: "Message ID." },
+                ]}
+            />
+
+            {/*  ATTENDANCE  */}
+            <SectionHeading id="get-attendance">getAttendance()</SectionHeading>
+            <p style={muted}>
+                Returns the full attendance record for the authenticated student — one entry per
+                lesson, indicating whether the student was present, absent, or late.
+            </p>
+            <CodeBlock language="typescript" code={`const records = await client.getAttendance();
+// Returns: AbsenceRecord[]
+
+for (const r of records) {
+  console.log(r.date);        // date string
+  console.log(r.subjectName); // subject name
+  console.log(r.status);      // 'present' | 'absent' | 'late' | string
+  console.log(r.lessonId);    // lesson identifier
+}`} />
+            <p style={muted}>Return type: <code style={inlineCode}>AbsenceRecord[]</code></p>
+            <CodeBlock language="typescript" code={`interface AbsenceRecord {
+  id?:          string | number;
+  date?:        string;
+  lessonId?:    string | number;
+  subjectName?: string;
+  status?:      'present' | 'absent' | 'late' | string;
+  [key: string]: unknown;
+}`} />
+
+            <SectionHeading id="get-absence-summary">getAbsenceSummary()</SectionHeading>
+            <p style={muted}>
+                Returns an aggregated attendance summary, grouped by subject. Includes total lessons,
+                total absences, and an overall attendance rate percentage.
+            </p>
+            <CodeBlock language="typescript" code={`const summary = await client.getAbsenceSummary();
+
+console.log(summary.totalLessons);    // e.g. 200
+console.log(summary.totalAbsences);   // e.g. 12
+console.log(summary.attendanceRate);  // e.g. 94 (percentage 0–100)
+
+for (const sub of summary.subjects) {
+  console.log(sub.subject);       // subject name
+  console.log(sub.totalLessons);  // total lessons for this subject
+  console.log(sub.absences);      // absences for this subject
+}`} />
+            <p style={muted}>Return type: <code style={inlineCode}>AttendanceSummary</code></p>
+            <CodeBlock language="typescript" code={`interface AttendanceSummary {
+  totalLessons:   number;
+  totalAbsences:  number;
+  attendanceRate: number;  // 0–100 percentage
+  subjects: Array<{
+    subject:      string;
+    totalLessons: number;
+    absences:     number;
+  }>;
+}`} />
+
+            {/*  GRADES  */}
+            <SectionHeading id="get-grades">getGrades()</SectionHeading>
+            <p style={muted}>
+                Returns all individual grade entries for the authenticated student.
+            </p>
+            <CodeBlock language="typescript" code={`const grades = await client.getGrades();
+// Returns: GradeEntry[]
+
+for (const g of grades) {
+  console.log(g.subjectName);  // e.g. 'Mathematics'
+  console.log(g.grade);        // e.g. 'A', 'B', 'E'
+  console.log(g.date);         // date the grade was set
+  console.log(g.teacherName);  // grading teacher
+  console.log(g.comment);      // optional comment
+}`} />
+            <p style={muted}>Return type: <code style={inlineCode}>GradeEntry[]</code></p>
+            <CodeBlock language="typescript" code={`interface GradeEntry {
+  id?:          string | number;
+  subjectName?: string;
+  activityId?:  string | number;
+  grade?:       string;
+  date?:        string;
+  teacherName?: string;
+  comment?:     string;
+  [key: string]: unknown;
+}`} />
+
+            <SectionHeading id="get-grade-overview">getGradeOverview()</SectionHeading>
+            <p style={muted}>
+                Returns a grade overview grouped by subject, including examinations and submissions
+                for each subject room.
+            </p>
+            <CodeBlock language="typescript" code={`const overview = await client.getGradeOverview();
+// Returns: GradeOverview[]
+
+for (const sub of overview) {
+  console.log(sub.subjectName);    // subject display name
+  console.log(sub.activityId);     // activity ID
+  console.log(sub.examinations);   // examination records
+  console.log(sub.submissions);    // submission records
+}`} />
+            <p style={muted}>Return type: <code style={inlineCode}>GradeOverview[]</code></p>
+            <CodeBlock language="typescript" code={`interface GradeOverview {
+  activityId:   string;
+  subjectName:  string;
+  examinations: Record<string, unknown>[];
+  submissions:  Record<string, unknown>[];
+}`} />
+
             {/*  ADVANCED  */}
             <SectionHeading id="functional-api">Advanced — Functional API</SectionHeading>
             <p style={muted}>
@@ -744,11 +1090,22 @@ for (const s of students) {
   getSchedule,
   getAssignmentsForWeek,
   getAssignment,
+  getCalendarEvents,
   getSubjects,
   getSubject,
   getNews,
+  getNewsDetail,
   getStartpage,
   getClassStudents,
+  getInbox,
+  getOutbox,
+  getMessage,
+  sendMessage,
+  markMessageRead,
+  getAttendance,
+  getAbsenceSummary,
+  getGrades,
+  getGradeOverview,
   isoWeek,
 } from '@elias4044/ssp-node';
 
@@ -758,10 +1115,10 @@ const session = await simpleLogin(school, { username: 'john.doe', password: 'sec
 const { lessons } = await getSchedule(school, session.cookieHeader, isoWeek(new Date()), 'my-agent/1.0');
 
 // ── Example: mobile login ──
-const tokens = await mobileLogin(school, { username: 'john.doe', password: 'secret' });
-const info   = await fetchMobileSession(school, tokens.accessToken);
+const tokens  = await mobileLogin(school, { username: 'john.doe', password: 'secret' });
+const info    = await fetchMobileSession(school, tokens.accessToken);
 const cookies = await mobileGetSession(school, tokens.accessToken, info?.userId);
-const news = await getNews(school, cookies.cookieHeader, 'my-agent/1.0');`} />
+const news    = await getNews(school, cookies.cookieHeader, 'my-agent/1.0');`} />
 
             <p style={{ ...muted, marginTop: "0.75rem" }}>
                 All data functions share the same signature pattern:
@@ -773,8 +1130,29 @@ const news = await getNews(school, cookies.cookieHeader, 'my-agent/1.0');`} />
   userAgent:    string,        // User-Agent header value
 ): Promise<ReturnType>`} />
 
+            {/* ── client.raw() ── */}
+            <SectionHeading id="raw-method">Advanced — client.raw()</SectionHeading>
+            <p style={muted}>
+                Makes a raw authenticated request to any SchoolSoft endpoint using the client&apos;s
+                stored session cookies. Useful for endpoints not yet covered by the library.
+                The <code style={inlineCode}>path</code> can be an absolute URL or a root-relative
+                path (starting with <code style={inlineCode}>/</code>).
+            </p>
+            <CodeBlock language="typescript" code={`// Root-relative path — the school slug is prepended automatically
+const result = await client.raw('/rest-api/student/some/endpoint', {
+  method:       'GET',
+  responseType: 'json',
+});
+console.log(result.status, result.data);
+
+// Absolute URL — used as-is
+const result2 = await client.raw<MyType>(
+  'https://sms.schoolsoft.se/engelska/rest-api/student/endpoint',
+  { responseType: 'json' }
+);`} />
+
             {/* ── Raw requests ── */}
-            <SectionHeading id="raw-requests">Advanced — Raw requests</SectionHeading>
+            <SectionHeading id="raw-requests">Advanced — Raw requests (schoolsoftFetch)</SectionHeading>
             <p style={muted}>
                 <code style={inlineCode}>schoolsoftFetch</code> is the underlying HTTP client used by every
                 function in the library. It automatically sets the correct <code style={inlineCode}>Origin</code>,
@@ -900,28 +1278,39 @@ const lunch  = await client.getLunch(22);`} />
             {/* ── Error handling ── */}
             <SectionHeading id="error-handling">Advanced — Error handling</SectionHeading>
             <p style={muted}>
-                All methods throw a plain <code style={inlineCode}>Error</code> on failure.
-                The message includes the HTTP status code and a human-readable description.
-                There are no custom error classes — use message inspection or status codes
-                from your logging layer to distinguish error types.
+                All errors thrown by the library extend the base <code style={inlineCode}>SchoolsoftError</code> class,
+                which carries the HTTP status code and endpoint URL. This lets you catch and inspect errors
+                programmatically without relying on message strings.
             </p>
-            <CodeBlock language="typescript" code={`try {
-  await client.login({ username: 'bad', password: 'wrong' });
-} catch (err) {
-  // 'Login failed — unexpected status 200. Check your credentials.'
-  console.error(err.message);
-}
+            <CodeBlock language="typescript" code={`import {
+  SchoolsoftError,
+  AuthenticationError,
+  SessionExpiredError,
+  NotFoundError,
+  RateLimitError,
+  NetworkError,
+  ParseError,
+} from '@elias4044/ssp-node';
 
 try {
   await client.getSchedule(22);
 } catch (err) {
-  if (err.message.includes('Not authenticated')) {
-    // Session expired — re-authenticate
+  if (err instanceof SessionExpiredError) {
+    // Session timed out — re-authenticate
     await client.login({ username, password });
-    const schedule = await client.getSchedule(22);
+  } else if (err instanceof RateLimitError) {
+    const wait = err.retryAfter ?? 60;
+    console.warn(\`Rate limited — retry in \${wait}s\`);
+  } else if (err instanceof AuthenticationError) {
+    console.error('Not logged in or access denied:', err.message);
+  } else if (err instanceof NetworkError) {
+    console.error('Network failure:', err.originalError);
+  } else if (err instanceof SchoolsoftError) {
+    // Catch-all for any other library error
+    console.error(\`[\${err.statusCode}] \${err.endpoint}: \${err.message}\`);
   }
 }`} />
-            <p style={muted}>Common error messages you may encounter:</p>
+            <p style={muted}>The full error hierarchy:</p>
             <div style={{
                 border: "1px solid var(--border)", borderRadius: "8px", overflow: "hidden",
                 fontSize: "0.8125rem", marginBottom: "1rem",
@@ -929,7 +1318,7 @@ try {
                 <table style={{ width: "100%", borderCollapse: "collapse" }}>
                     <thead>
                         <tr style={{ background: "var(--surface-raised)", textAlign: "left" }}>
-                            {["Error message", "Cause"].map(h => (
+                            {["Class", "Extends", "When thrown"].map(h => (
                                 <th key={h} style={{
                                     padding: "0.4375rem 0.75rem", fontWeight: 600, fontSize: "0.6875rem",
                                     letterSpacing: "0.04em", borderBottom: "1px solid var(--border)",
@@ -940,20 +1329,22 @@ try {
                     </thead>
                     <tbody>
                         {[
-                            ["Login failed — unexpected status …", "Wrong credentials or school slug."],
-                            ["Mobile login failed — no authorization code returned.", "Invalid credentials for mobile flow."],
-                            ["Token exchange failed — status …", "PKCE verifier mismatch or expired code."],
-                            ["Token refresh failed — status …", "Refresh token expired; user must log in again."],
-                            ["Session exchange failed — no JSESSIONID or hash.", "Access token expired and refresh failed."],
-                            ["Not authenticated. Call login() or mobileLogin() first.", "Calling a data method before authenticating."],
-                            ["No refresh token available.", "Calling mobileRefresh() without a refresh token."],
-                            ["Invalid week number: …", "Passing a week number outside the range 1–53."],
-                        ].map(([msg, cause], i, arr) => (
+                            ["SchoolsoftError",     "Error",           "Base class. Carries statusCode and endpoint."],
+                            ["AuthenticationError", "SchoolsoftError", "Unauthenticated call or SchoolSoft returns 401/403."],
+                            ["SessionExpiredError", "SchoolsoftError", "Session cookies are present but the session has expired."],
+                            ["NotFoundError",       "SchoolsoftError", "SchoolSoft returns 404 for a resource."],
+                            ["RateLimitError",      "SchoolsoftError", "SchoolSoft returns 429. Has optional retryAfter (seconds)."],
+                            ["NetworkError",        "SchoolsoftError", "Connection refused, timeout, or other transport failure."],
+                            ["ParseError",          "SchoolsoftError", "Response shape was unexpected and parsing failed."],
+                        ].map(([cls, ext, when], i, arr) => (
                             <tr key={i} style={{ borderBottom: i < arr.length - 1 ? "1px solid var(--border-subtle)" : "none" }}>
                                 <td style={{ padding: "0.5rem 0.75rem" }}>
-                                    <code style={{ fontFamily: "var(--font-geist-mono, monospace)", color: "var(--accent)", fontSize: "0.75rem" }}>{msg}</code>
+                                    <code style={{ fontFamily: "var(--font-geist-mono, monospace)", color: "var(--accent)", fontSize: "0.75rem" }}>{cls}</code>
                                 </td>
-                                <td style={{ padding: "0.5rem 0.75rem", color: "var(--muted)", lineHeight: 1.5 }}>{cause}</td>
+                                <td style={{ padding: "0.5rem 0.75rem" }}>
+                                    <code style={{ fontFamily: "var(--font-geist-mono, monospace)", color: "var(--muted)", fontSize: "0.75rem" }}>{ext}</code>
+                                </td>
+                                <td style={{ padding: "0.5rem 0.75rem", color: "var(--muted)", lineHeight: 1.5 }}>{when}</td>
                             </tr>
                         ))}
                     </tbody>
@@ -967,6 +1358,7 @@ try {
             </p>
             <CodeBlock language="typescript" code={`import type {
   SchoolsoftClientOptions,
+  RetryOptions,
   SimpleLoginResult,
   MobileLoginResult,
   MobileAuthFlowInit,
@@ -976,11 +1368,15 @@ try {
   School,
   LunchMenu, LunchDay, LunchItem,
   ScheduleLesson,
+  CalendarEvent,
   Assignment, AssignmentDetail,
   Subject, SubjectEntity, SubjectDetail,
-  NewsItem,
+  NewsItem, NewsDetail,
   StartpageData, StartpageHomework, StartpageTest,
   ClassStudent,
+  Message, MessageDetail, MessageRecipient, MessageAttachment, SendMessageOptions,
+  AbsenceRecord, AttendanceSummary,
+  GradeEntry, GradeOverview,
 } from '@elias4044/ssp-node';`} />
 
             {/* ── Client options ── */}
@@ -991,14 +1387,26 @@ try {
             <ParamTable
                 title="SchoolsoftClientOptions"
                 rows={[
-                    { name: "school",    type: "string", required: false, description: "School slug from the URL (the part between sms.schoolsoft.se/ and the next /). Defaults to 'engelska'. Use getSchools() to find yours." },
-                    { name: "userAgent", type: "string", required: false, description: "Custom User-Agent header sent with all requests. Defaults to 'ssp-node/1.0 (https://github.com/schoolsoftplus/ssp-node)'." },
+                    { name: "school",          type: "string",                       required: false, description: "School slug from the URL (between sms.schoolsoft.se/ and the next /). Defaults to 'engelska'. Use getSchools() to find yours." },
+                    { name: "userAgent",        type: "string",                       required: false, description: "Custom User-Agent header sent with all requests." },
+                    { name: "debug",            type: "boolean",                      required: false, description: "Emit debug messages to stderr. Defaults to false." },
+                    { name: "retry",            type: "boolean | RetryOptions",       required: false, description: "Automatic retry on transient failures. Pass true for defaults, false to disable, or a RetryOptions object. Enabled by default with 3 attempts." },
+                    { name: "cache",            type: "false | { schools?: number }", required: false, description: "Cache config. Set false to disable, or pass an object with a schools TTL in milliseconds (default 3 600 000 = 1 hour)." },
+                    { name: "onSessionExpired", type: "() => void | Promise<void>",   required: false, description: "Callback invoked when a SessionExpiredError is detected. Use it to trigger re-authentication in long-running processes." },
                 ]}
             />
+            <CodeBlock language="typescript" code={`// RetryOptions — all fields optional
+interface RetryOptions {
+  maxAttempts?:   number;    // total attempts including the first. Default: 3
+  initialDelay?:  number;    // ms before the first retry. Default: 500
+  backoffFactor?: number;    // multiplier after each attempt. Default: 2
+  maxDelay?:      number;    // upper bound on delay in ms. Default: 10 000
+  retryOn?:       number[];  // HTTP status codes to retry. Default: [429, 502, 503, 504]
+}`} />
             <p style={muted}>
-                The school slug is the only required piece of configuration. You can find your
-                school&apos;s slug by visiting <code style={inlineCode}>https://sms.schoolsoft.se</code> and looking at
-                the URL after you select your school, or by calling <code style={inlineCode}>getSchools()</code>:
+                The school slug is the only meaningful piece of configuration for most use cases.
+                You can find your school&apos;s slug by visiting <code style={inlineCode}>https://sms.schoolsoft.se</code> and
+                looking at the URL after you select your school, or by calling <code style={inlineCode}>getSchools()</code>:
             </p>
             <CodeBlock language="typescript" code={`const schools = await client.getSchools();
 const mine = schools.find(s => s.name.toLowerCase().includes('my school name'));
@@ -1021,31 +1429,61 @@ export {
 } from './auth/mobile';
 
 // API functions (functional)
-export { getSession }             from './api/session';
-export { getSchools }             from './api/schools';
-export { getLunch }               from './api/lunch';
-export { getSchedule, isoWeek }   from './api/schedule';
+export { getSession }                           from './api/session';
+export { getSchools }                           from './api/schools';
+export { getLunch }                             from './api/lunch';
+export { getSchedule, isoWeek }                 from './api/schedule';
 export { getAssignmentsForWeek, getAssignment } from './api/assignments';
-export { getSubjects, getSubject } from './api/subjects';
-export { getNews }                from './api/news';
-export { getStartpage }           from './api/startpage';
-export { getClassStudents }       from './api/people';
+export { getCalendarEvents }                    from './api/calendar';
+export { getSubjects, getSubject }              from './api/subjects';
+export { getNews }                              from './api/news';
+export { getNewsDetail }                        from './api/newsdetail';
+export { getStartpage }                         from './api/startpage';
+export { getClassStudents }                     from './api/people';
+export {
+  getInbox, getOutbox, getMessage,
+  sendMessage, markMessageRead,
+}                                               from './api/messages';
+export { getAttendance, getAbsenceSummary }     from './api/attendance';
+export { getGrades, getGradeOverview }          from './api/grades';
 
 // Utilities
-export { makePkcePair, makeState, base64url } from './utils/pkce';
+export { makePkcePair, makeState, base64url }   from './utils/pkce';
 export {
   schoolsoftFetch, rawRequest, ssUrl, extractCookie,
   parseCookieValue, SS_ORIGIN, DEFAULT_UA,
-} from './utils/http';
-export { decodeLatin1, parseHtml } from './utils/html';
+}                                               from './utils/http';
+export { decodeLatin1, parseHtml }              from './utils/html';
+export { Cache }                                from './utils/cache';
+export { withRetry }                            from './utils/retry';
+export {
+  isoWeek as isoWeekUtil, isoYear, weekRange,
+  toDateString, parseSchoolsoftDate, weekDayName,
+  currentWeek, currentYear, isWeekend, schoolDays,
+}                                               from './utils/date';
 
-// All types (re-exported as type exports)
-export type { SchoolsoftClientOptions, SimpleLoginResult, MobileLoginResult,
+// Typed error classes
+export {
+  SchoolsoftError, AuthenticationError, SessionExpiredError,
+  NotFoundError, RateLimitError, NetworkError, ParseError,
+}                                               from './utils/errors';
+
+// All types
+export type {
+  SchoolsoftClientOptions, RetryOptions,
+  SimpleLoginResult, MobileLoginResult,
   MobileAuthFlowInit, MobileSessionResult, MobileSessionOptions,
-  SessionInfo, SessionUser, SessionOrganization, School,
-  LunchMenu, LunchDay, LunchItem, ScheduleLesson,
-  Assignment, AssignmentDetail, Subject, SubjectEntity, SubjectDetail,
-  NewsItem, StartpageData, StartpageHomework, StartpageTest, ClassStudent,
+  SessionInfo, SessionUser, SessionOrganization,
+  School, LunchMenu, LunchDay, LunchItem,
+  ScheduleLesson, CalendarEvent,
+  Assignment, AssignmentDetail,
+  Subject, SubjectEntity, SubjectDetail,
+  NewsItem, NewsDetail,
+  StartpageData, StartpageHomework, StartpageTest,
+  ClassStudent,
+  Message, MessageDetail, MessageRecipient, MessageAttachment, SendMessageOptions,
+  AbsenceRecord, AttendanceSummary,
+  GradeEntry, GradeOverview,
 } from './types';`} />
         </DocLayout>
     );

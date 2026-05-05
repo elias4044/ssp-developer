@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 
 /* --- Method Badge - */
 const METHOD_COLORS: Record<string, { bg: string; text: string; border: string }> = {
@@ -34,8 +34,107 @@ export function MethodBadge({ method }: { method: string }) {
   );
 }
 
+/* --- Syntax highlighting ----------------------------------- */
+type TokType = 'keyword' | 'string' | 'comment' | 'number' | 'type' | 'value' | 'plain';
+
+const TOK_COLOR: Partial<Record<TokType, string>> = {
+  keyword: '#ff7b72',
+  string:  '#a5d6ff',
+  comment: '#8b949e',
+  number:  '#e3b341',
+  type:    '#ffa657',
+  value:   '#79c0ff',
+};
+
+const TS_KEYWORDS = new Set([
+  'import','export','from','as','const','let','var','function','class',
+  'interface','type','extends','implements','return','if','else','for',
+  'while','do','try','catch','finally','throw','new','delete','typeof',
+  'instanceof','in','of','await','async','static','public','private',
+  'protected','readonly','abstract','declare','namespace','enum','default',
+  'break','continue','switch','case','yield','super','this','keyof',
+]);
+const TS_VALUES = new Set(['true','false','null','undefined','void','never']);
+const TS_TYPES  = new Set(['string','number','boolean','object','any','unknown','symbol','bigint']);
+
+function tokenizeTS(code: string): Array<{ t: string; k: TokType }> {
+  const out: Array<{ t: string; k: TokType }> = [];
+  let i = 0;
+  while (i < code.length) {
+    // line comment
+    if (code[i] === '/' && code[i+1] === '/') {
+      const e = code.indexOf('\n', i); const end = e < 0 ? code.length : e;
+      out.push({ t: code.slice(i, end), k: 'comment' }); i = end; continue;
+    }
+    // block comment
+    if (code[i] === '/' && code[i+1] === '*') {
+      const e = code.indexOf('*/', i+2); const end = e < 0 ? code.length : e+2;
+      out.push({ t: code.slice(i, end), k: 'comment' }); i = end; continue;
+    }
+    // template literal
+    if (code[i] === '`') {
+      let j = i+1;
+      while (j < code.length) { if (code[j]==='\\') { j+=2; continue; } if (code[j]==='`') { j++; break; } j++; }
+      out.push({ t: code.slice(i, j), k: 'string' }); i = j; continue;
+    }
+    // quoted string
+    if (code[i] === '"' || code[i] === "'") {
+      const q = code[i]; let j = i+1;
+      while (j < code.length) { if (code[j]==='\\') { j+=2; continue; } if (code[j]===q||code[j]==='\n') { if(code[j]!=='\n') j++; break; } j++; }
+      out.push({ t: code.slice(i, j), k: 'string' }); i = j; continue;
+    }
+    // number
+    if (/[0-9]/.test(code[i])) {
+      let j = i;
+      while (j < code.length && /[0-9._xXa-fA-FoObB]/.test(code[j])) j++;
+      out.push({ t: code.slice(i, j), k: 'number' }); i = j; continue;
+    }
+    // identifier / keyword
+    if (/[a-zA-Z_$]/.test(code[i])) {
+      let j = i;
+      while (j < code.length && /[a-zA-Z0-9_$]/.test(code[j])) j++;
+      const w = code.slice(i, j);
+      const k: TokType = TS_KEYWORDS.has(w) ? 'keyword' : TS_VALUES.has(w) ? 'value' : TS_TYPES.has(w) ? 'type' : /^[A-Z]/.test(w) ? 'type' : 'plain';
+      out.push({ t: w, k }); i = j; continue;
+    }
+    out.push({ t: code[i], k: 'plain' }); i++;
+  }
+  return out;
+}
+
+function tokenizeBash(code: string): Array<{ t: string; k: TokType }> {
+  const out: Array<{ t: string; k: TokType }> = [];
+  let i = 0;
+  while (i < code.length) {
+    if (code[i] === '#') {
+      const e = code.indexOf('\n', i); const end = e < 0 ? code.length : e;
+      out.push({ t: code.slice(i, end), k: 'comment' }); i = end; continue;
+    }
+    if (code[i] === '"' || code[i] === "'") {
+      const q = code[i]; let j = i+1;
+      while (j < code.length) { if (code[j]==='\\') { j+=2; continue; } if (code[j]===q||code[j]==='\n') { if(code[j]!=='\n') j++; break; } j++; }
+      out.push({ t: code.slice(i, j), k: 'string' }); i = j; continue;
+    }
+    if (code[i] === '-' && /[a-zA-Z-]/.test(code[i+1] ?? '')) {
+      let j = i;
+      while (j < code.length && !/\s/.test(code[j])) j++;
+      out.push({ t: code.slice(i, j), k: 'type' }); i = j; continue;
+    }
+    out.push({ t: code[i], k: 'plain' }); i++;
+  }
+  return out;
+}
+
+function highlight(code: string, lang: string): React.ReactNode[] {
+  const tokens = lang === 'bash' ? tokenizeBash(code) : tokenizeTS(code);
+  return tokens.map((tok, idx) => {
+    const color = TOK_COLOR[tok.k];
+    return color ? <span key={idx} style={{ color }}>{tok.t}</span> : tok.t;
+  });
+}
+
 /* --- Code Block with copy ----------------------------------- */
-export function CodeBlock({ code, language = "json" }: { code: string; language?: string }) {
+export function CodeBlock({ code, language = "typescript" }: { code: string; language?: string }) {
   const [copied, setCopied] = useState(false);
 
   const copy = () => {
@@ -117,7 +216,7 @@ export function CodeBlock({ code, language = "json" }: { code: string; language?
           color: "#adbac7",
         }}
       >
-        <code>{code}</code>
+        <code>{highlight(code, language)}</code>
       </pre>
     </div>
   );
