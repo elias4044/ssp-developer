@@ -354,7 +354,7 @@ export default function SSPRoutesPage() {
     {
       "id":      "4821",
       "title":   "Studiedag 14 januari",
-      "preview": "Skolan hÃ¥ller stÃ¤ngt mÃ¥ndag den 14 januari..."
+      "preview": "Skolan håller stngt måndag den 14 januari..."
     }
   ]
 }`}
@@ -384,7 +384,7 @@ export default function SSPRoutesPage() {
       "entities": [
         {
           "assignmentId": "8821",
-          "title":        "Derivatans tillÃ¤mpningar",
+          "title":        "Derivatans tillämpningar",
           "deadline":     "2025-01-17T23:59:00",
           "entityType":   "ASSIGNMENT"
         }
@@ -415,7 +415,7 @@ export default function SSPRoutesPage() {
     {
       "assignmentId": "8821",
       "subjectName":  "Matematik 2b",
-      "title":        "Derivatans tillÃ¤mpningar",
+      "title":        "Derivatans tillämpningar",
       "deadline":     "2025-01-17T23:59:00",
       "status":       "assigned"
     }

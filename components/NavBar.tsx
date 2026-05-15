@@ -11,6 +11,7 @@ const navLinks = [
   { href: "/docs/ssp-node", label: "SSP Node" },
   { href: "/docs/schoolsoft-api", label: "SchoolSoft API" },
   { href: "/docs/ssp-routes", label: "SSP+ Routes" },
+  { href: "/docs/auth-v2", label: "AuthV2" },
 ];
 
 export default function NavBar() {

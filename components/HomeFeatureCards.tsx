@@ -18,6 +18,15 @@ function PlugIcon() {
   );
 }
 
+function LockIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+    </svg>
+  );
+}
+
 const features = [
   {
     icon: <SignalIcon />,
@@ -34,6 +43,14 @@ const features = [
       "Full reference for all HTTP routes exposed by SchoolSoft+. Covers auth, academic data, social features, notes, countdowns, user search, and stats.",
     href: "/docs/ssp-routes",
     label: "View SSP+ Routes",
+  },
+  {
+    icon: <LockIcon />,
+    title: "AuthV2",
+    description:
+      "In-depth guide to the OAuth 2.0 PKCE-based authentication flow used by SchoolSoft's mobile apps. Covers the full flow, token exchange, security model, and implementation.",
+    href: "/docs/auth-v2",
+    label: "View AuthV2",
   },
 ];
 

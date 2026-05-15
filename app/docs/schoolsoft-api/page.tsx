@@ -233,7 +233,7 @@ Set-Cookie: usertype=1; Path=/`}
                     language="http"
                     code={`HTTP/1.1 200 OK
 Content-Type: text/html; charset=ISO-8859-1
-[HTML body containing "Felaktigt anvÃ¤ndarnamn eller lÃ¶senord"]`}
+[HTML body containing "Felaktigt användarnamn eller lÃ¶senord"]`}
                 />
             </EndpointCard>
 
@@ -383,7 +383,7 @@ Content-Type: text/html; charset=ISO-8859-1
     "dishes": [
       {
         "dishType": "Lunch",
-        "dish": "GrÃ¶nsaksgratÃ¤ng citron & dill serveras med potatis \r\n\r\nFiskgratÃ¤ng citron & dill serveras med potatis"
+        "dish": "GrÃ¶nsaksgratäng citron & dill serveras med potatis \r\n\r\nFiskgratäng citron & dill serveras med potatis"
       }
     ]
   },
@@ -442,7 +442,7 @@ Content-Type: text/html; charset=ISO-8859-1
     <tr>
       <a class="toplist-item" href="...requestid=4821...">
         <div class="heading_bold">Studiedag 14 januari</div>
-        <div>Skolan hÃ¥ller stÃ¤ngt mÃ¥ndag den 14 januari...</div>
+        <div>Skolan håller stängt måndag den 14 januari...</div>
       </a>
     </tr>
   </table>
@@ -457,7 +457,7 @@ Content-Type: text/html; charset=ISO-8859-1
   {
     "id":      "4821",
     "title":   "Studiedag 14 januari",
-    "preview": "Skolan hÃ¥ller stÃ¤ngt mÃ¥ndag den 14 januari..."
+    "preview": "Skolan håller stängt måndag den 14 januari..."
   }
 ]`}
                 />
@@ -501,8 +501,8 @@ Content-Type: text/html; charset=ISO-8859-1
   {
     "planningId": null,
     "assignmentId": "8821",
-    "title":        "Derivatans tillÃ¤mpningar",
-    "description":  "LÃ¶s uppgifterna pÃ¥ sida 142â€“148.",
+    "title":        "Derivatans tillämpningar",
+    "description":  "LÃ¶s uppgifterna på sida 142â€“148.",
     "deadline":     "2025-01-17T23:59:00",
     "status":       "assigned"
   }
@@ -546,7 +546,7 @@ Content-Type: text/html; charset=ISO-8859-1
   {
     "assignmentId": "8821",
     "subjectName":  "Matematik 2b",
-    "title":        "Derivatans tillÃ¤mpningar",
+    "title":        "Derivatans tillämpningar",
     "deadline":     "2025-01-17T23:59:00",
     "status":       "assigned"
   }
