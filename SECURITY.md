@@ -12,7 +12,7 @@ If you believe you have found a security vulnerability in **SchoolSoft+ itself**
 
 ## Reporting a vulnerability
 
-Please email **elias@elias4044.com** with:
+Please email **hello@elias4044.com** with:
 
 - A description of the vulnerability
 - Steps to reproduce (if applicable)

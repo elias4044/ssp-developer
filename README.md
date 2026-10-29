@@ -1,139 +1,51 @@
-<div align="center">
+# SchoolSoft+ Developer
 
- <img src="public/logo.png" alt="SchoolSoft+ Logo" width="72" height="72" />
+The developer site for [SchoolSoft+](https://ssp.elias4044.com). Built with Next.js 16, React 19, Tailwind CSS 4, and Geist.
 
-  <h1>SchoolSoft+ Developer</h1>
+## Run locally
 
-  <p>
-    The official documentation site for SchoolSoft+ — covering the unofficial SchoolSoft API
-    (reverse-engineered) and every route exposed by the SchoolSoft+ platform itself.
-  </p>
+Use Node.js 20.9 or newer and npm.
 
-  <p>
-    <a href="https://developer.ssp.elias4044.com"><img src="https://img.shields.io/badge/live-developer.ssp.elias4044.com-7ca5d0?style=flat-square" alt="Live site" /></a>
-    <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-3fb950?style=flat-square" alt="MIT License" /></a>
-    <img src="https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js" alt="Next.js 16" />
-    <img src="https://img.shields.io/badge/TypeScript-5-3178c6?style=flat-square&logo=typescript" alt="TypeScript 5" />
-    <img src="https://img.shields.io/badge/Tailwind_CSS-v4-0ea5e9?style=flat-square&logo=tailwindcss" alt="Tailwind CSS v4" />
-  </p>
-
-  <br/>
-
-</div>
-
----
-
-## What's in here
-
-| Section | Description |
-|---|---|
-| [SchoolSoft API Reference](https://developer.ssp.elias4044.com/docs/schoolsoft-api) | Unofficial, reverse-engineered docs for SchoolSoft's internal REST & JSP endpoints — auth flow, schedule, lunch, news, subjects, assignments |
-| [SchoolSoft+ Routes](https://developer.ssp.elias4044.com/docs/ssp-routes) | Full reference for every API route in SchoolSoft+ — auth, academic data, social, notes, countdowns, presence, and more |
-
----
-
-## Stack
-
-- **[Next.js 16](https://nextjs.org/)** — App Router, React 19, Server Components
-- **[TypeScript 5](https://www.typescriptlang.org/)** — strict mode throughout
-- **[Tailwind CSS v4](https://tailwindcss.com/)** — utility classes + CSS custom properties for the design system
-- **[Lucide React](https://lucide.dev/)** — SVG icon library
-- **[Geist](https://vercel.com/font)** — Vercel's Geist Sans & Geist Mono typefaces
-
-No external UI component library — all doc primitives (`CodeBlock`, `EndpointCard`, `ParamTable`, `Callout`, etc.) are hand-rolled in `components/DocComponents.tsx`.
-
----
-
-## Getting started
-
-**Prerequisites:** Node.js 18+ and npm.
-
-```bash
-# 1. Clone the repo
-git clone https://github.com/elias4044/ssp-developer.git
-cd ssp-developer
-
-# 2. Install dependencies
-npm install
-
-# 3. Start the dev server
+```sh
+npm ci
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Other commands:
 
-### Other commands
-
-```bash
-npm run build   # production build
-npm run start   # start production server
-npm run lint    # run ESLint
+```sh
+npm run lint
+npm test
+npm run build
+npm start
 ```
 
----
+On Windows, use `npm run dev -- --webpack` if Turbopack cannot create its required filesystem links.
 
-## Project structure
+## Documentation source
 
-```
-app/
-├── page.tsx                      # Home / landing page
-├── layout.tsx                    # Root layout (NavBar + Footer)
-├── globals.css                   # Design tokens (CSS custom properties)
-└── docs/
-    ├── schoolsoft-api/page.tsx   # Unofficial SchoolSoft API reference
-    └── ssp-routes/page.tsx       # SchoolSoft+ routes reference
+All reference content comes from [`elias4044/schoolsoftplus`, branch `main`, directory `docs/`](https://github.com/elias4044/schoolsoftplus/tree/main/docs). This site does not maintain a second copy of the reference.
 
-components/
-├── NavBar.tsx                    # Sticky top nav + mobile drawer
-├── Footer.tsx                    # Site footer
-├── DocLayout.tsx                 # Two-column doc layout (sticky sidebar + main)
-├── DocComponents.tsx             # Reusable doc primitives
-│   ├── MethodBadge               # GET / POST / PUT / PATCH / DELETE pill
-│   ├── CodeBlock                 # Syntax-highlighted code block with copy
-│   ├── EndpointCard              # Collapsible endpoint card with copy-path
-│   ├── ParamTable                # Request/response parameter table
-│   ├── SectionHeading            # h2 with anchor-copy button
-│   ├── SubHeading                # h3 with # prefix
-│   └── Callout                   # info / warning / danger callout
-└── HomeFeatureCards.tsx          # Interactive feature cards (Client Component)
-```
+- Add `.md` or `.mdx` files anywhere beneath `docs/`. Nested folders become navigation groups and nested routes.
+- `docs/README.md` becomes `/docs/README`; `docs/api/auth.md` becomes `/docs/api/auth`.
+- The `/docs` index lists all published documents, searchable by title, group, and path. Titles are derived from file names; the document body retains its own heading.
+- GitHub Flavored Markdown supports tables, task lists, fenced code, and automatic links. Frontmatter is omitted from the rendered body. MDX is rendered as Markdown; JavaScript, JSX components, and raw HTML are not executed.
+- Relative Markdown links point to local document routes. Relative images and other files resolve against the same repository commit. Heading links have stable IDs with suffixes for duplicates.
+- The server checks GitHub on a five-minute cache interval. No site redeployment is needed when documents are added. The first request after expiry triggers revalidation; the refreshed result may appear on the following request.
+- Published document pages are prerendered and served from Next.js's route cache. Newly added paths render on their first visit and then join the cache. Markdown fetched at an immutable commit stays cached; a new commit automatically uses a new content key.
+- Document links prefetch complete pages and use client navigation, including links inside Markdown. The current page remains visible until its replacement is ready, without a full-page loading flash.
+- Missing documentation shows an unpublished state. Network errors, rate limits, and incomplete GitHub responses show an unavailable state with recovery links.
+- The previous `/docs/ssp-node`, `/docs/schoolsoft-api`, `/docs/ssp-routes`, and `/docs/auth-v2` URLs remain entry points until matching upstream documents exist. Other missing document paths show the not-found page when the index is available. Next.js streamed responses use HTTP 200 with `noindex` metadata for these pages.
 
----
+The source is public, so no token is required. For higher GitHub API limits, set an optional `GITHUB_TOKEN` in the server environment. It is never sent to the browser. Each upstream request has an eight-second timeout.
 
-## Design system
+## Structure
 
-All colors are defined as CSS custom properties in `app/globals.css` and referenced throughout via `var(--*)`. There are no hardcoded color values in component files.
-
-| Token | Value | Usage |
-|---|---|---|
-| `--background` | `#0d1117` | Page background |
-| `--surface` | `#161b22` | Cards, sidebar, navbar |
-| `--surface-raised` | `#1c2128` | Elevated surfaces |
-| `--border` | `#30363d` | All borders |
-| `--foreground` | `#cdd9e5` | Primary text |
-| `--muted` | `#768390` | Secondary text |
-| `--accent` | `#7ca5d0` | Links, active states, icons |
-
----
-
-## Contributing
-
-Contributions, corrections, and additions are welcome — especially to the API docs, which are reverse-engineered and may be incomplete or out of date.
-
-1. Fork the repo and create a branch: `git checkout -b fix/my-change`
-2. Make your changes
-3. Open a pull request — fill in the PR template
-
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) before submitting.
-
----
-
-## Related
-
-- **[SchoolSoft+](https://github.com/elias4044/schoolsoftplus)** — the main app this documents
----
-
-## License
-
-[MIT](LICENSE) © Elias Gulam
-
+- `app/page.tsx`: developer landing page.
+- `app/docs/[[...slug]]/page.tsx`: documentation index and reader.
+- `lib/docs.ts`: GitHub loading, indexing, relative-link handling, and headings.
+- `components/MarkdownContent.tsx`: safe Markdown rendering.
+- `components/DocSearch.tsx`: client-side document filtering.
+- `components/SourceTools.tsx`: copyable setup and repository metadata.
+- `app/globals.css`: SchoolSoft+ inspired tokens, responsive layouts, and reduced-motion behavior.
+- `scripts/docs.test.mjs`: documentation source and navigation checks.
