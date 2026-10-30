@@ -4,6 +4,8 @@ import { unified } from "unified";
 import remarkParse from "remark-parse";
 import remarkGfm from "remark-gfm";
 import type { PhrasingContent } from "mdast";
+import { unstable_cache } from "next/cache";
+import { enrichDocsEntries } from "./docs-metadata";
 
 import {
   repositoryUrl,
@@ -19,6 +21,7 @@ export {
   type DocsIndex,
 } from "./docs-shared";
 const apiUrl = "https://api.github.com/repos/elias4044/schoolsoftplus";
+export const docsCacheTag = "schoolsoft-docs-snapshot";
 
 type TreeItem = { path: string; type: string };
 
@@ -61,6 +64,7 @@ export function createDocsIndex(
 
 function requestOptions(revalidate: number | false = 300) {
   return {
+    cache: revalidate === false ? ("force-cache" as const) : undefined,
     headers: {
       Accept: "application/vnd.github+json",
       ...(process.env.GITHUB_TOKEN
@@ -72,33 +76,63 @@ function requestOptions(revalidate: number | false = 300) {
   };
 }
 
+async function loadDocsIndex(): Promise<DocsIndex> {
+  const commitResponse = await fetch(`${apiUrl}/commits/main`, {
+    ...requestOptions(),
+    cache: "no-store",
+    next: undefined,
+  });
+  if (!commitResponse.ok)
+    throw new Error(`GitHub returned ${commitResponse.status}`);
+  const commit = await commitResponse.json();
+  if (
+    typeof commit.sha !== "string" ||
+    typeof commit.commit?.tree?.sha !== "string"
+  )
+    throw new Error("Incomplete GitHub commit");
+  const response = await fetch(
+    `${apiUrl}/git/trees/${commit.commit.tree.sha}?recursive=1`,
+    requestOptions(false),
+  );
+  if (!response.ok) throw new Error(`GitHub returned ${response.status}`);
+  const data = await response.json();
+  if (
+    !Array.isArray(data.tree) ||
+    data.truncated ||
+    typeof data.sha !== "string"
+  )
+    throw new Error("Incomplete GitHub tree");
+  const index = createDocsIndex(data.tree, commit.sha);
+  const metadataEntries = index.entries.filter(
+    (entry) =>
+      /(?:^|\/)(README|index)$/i.test(entry.slug) || !entry.slug.includes("/"),
+  );
+  const contents: Record<string, string> = {};
+  await Promise.all(
+    metadataEntries.map(async (entry) => {
+      const content = await getDocContent(entry.path, commit.sha);
+      if (content === null)
+        throw new Error(`Could not load documentation index ${entry.path}`);
+      contents[entry.path] = content;
+    }),
+  );
+  return {
+    ...index,
+    entries: enrichDocsEntries(index.entries, contents),
+    checkedAt: new Date().toISOString(),
+  };
+}
+
+// Keep the existing Next.js cache model; the whole navigation snapshot refreshes together.
+const getCachedDocsIndex = unstable_cache(
+  loadDocsIndex,
+  ["docs-navigation-v2"],
+  { revalidate: 300, tags: [docsCacheTag] },
+);
+
 export const getDocsIndex = cache(async (): Promise<DocsIndex> => {
   try {
-    const commitResponse = await fetch(
-      `${apiUrl}/commits/main`,
-      requestOptions(),
-    );
-    if (!commitResponse.ok)
-      throw new Error(`GitHub returned ${commitResponse.status}`);
-    const commit = await commitResponse.json();
-    if (
-      typeof commit.sha !== "string" ||
-      typeof commit.commit?.tree?.sha !== "string"
-    )
-      throw new Error("Incomplete GitHub commit");
-    const response = await fetch(
-      `${apiUrl}/git/trees/${commit.commit.tree.sha}?recursive=1`,
-      requestOptions(),
-    );
-    if (!response.ok) throw new Error(`GitHub returned ${response.status}`);
-    const data = await response.json();
-    if (
-      !Array.isArray(data.tree) ||
-      data.truncated ||
-      typeof data.sha !== "string"
-    )
-      throw new Error("Incomplete GitHub tree");
-    return createDocsIndex(data.tree, commit.sha);
+    return await getCachedDocsIndex();
   } catch (error) {
     console.error(
       "Documentation index could not be loaded:",
@@ -153,7 +187,11 @@ export function resolveDocLink(
     ? path.posix.normalize(decodedTarget.slice(1))
     : path.posix.join(path.posix.dirname(filePath), decodedTarget);
   const entry = entries.find(
-    (item) => item.path === resolved || item.slug === docSlug(resolved),
+    (item) =>
+      item.path === resolved ||
+      item.slug === docSlug(resolved) ||
+      item.path === `${resolved.replace(/\/$/, "")}/README.md` ||
+      item.path === `${resolved.replace(/\/$/, "")}/index.md`,
   );
   if (entry && !image)
     return `${docHref(entry.slug)}${fragment ? `#${fragment}` : ""}`;
